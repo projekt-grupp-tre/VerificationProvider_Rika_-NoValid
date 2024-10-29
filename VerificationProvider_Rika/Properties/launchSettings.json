@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "VerificationProvider_Rika": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7082",
+      "launchBrowser": false
+    }
+  }
+}
