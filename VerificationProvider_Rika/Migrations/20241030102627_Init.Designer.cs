@@ -12,7 +12,7 @@ using VerificationProvider_Rika.Data.Contexts;
 namespace VerificationProvider_Rika.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241030100626_Init")]
+    [Migration("20241030102627_Init")]
     partial class Init
     {
         /// <inheritdoc />
