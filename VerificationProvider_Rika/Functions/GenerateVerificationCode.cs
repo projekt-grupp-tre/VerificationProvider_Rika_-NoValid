@@ -1,32 +1,54 @@
-using System;
-using System.Threading.Tasks;
+
 using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using VerificationProvider_Rika.Services;
 
-namespace VerificationProvider_Rika.Functions
+namespace VerificationProvider_Rika.Functions;
+
+public class GenerateVerificationCode(ILogger<GenerateVerificationCode> logger, IVerificationService verificationService)
 {
-    public class GenerateVerificationCode
+    private readonly ILogger<GenerateVerificationCode> _logger = logger;
+    private readonly IVerificationService _verificationService = verificationService;
+
+    [Function(nameof(GenerateVerificationCode))]
+    [ServiceBusOutput("email_request", Connection = "ServiceBusConnection")]
+    public async Task<string> Run(
+        [ServiceBusTrigger("verification_request", Connection = "ServiceBusConnection")]
+        ServiceBusReceivedMessage message,
+        ServiceBusMessageActions messageActions)
     {
-        private readonly ILogger<GenerateVerificationCode> _logger;
-
-        public GenerateVerificationCode(ILogger<GenerateVerificationCode> logger)
+        try
         {
-            _logger = logger;
+            var verificationRequest = _verificationService.UnpackVerificationRequest(message);
+            if (verificationRequest != null)
+            {
+                var code = _verificationService.GenerateCode();
+                if (!string.IsNullOrEmpty(code))
+                {
+                    var result = await _verificationService.SaveVerificationRequest(verificationRequest, code);
+                    if (result)
+                    {
+                        var emailRequest = _verificationService.GenerateEmailRequest(verificationRequest, code);
+                        if (emailRequest != null)
+                        {
+                            string payload = _verificationService.GenerateServiceBusEmailRequest(emailRequest);
+                            if (!string.IsNullOrEmpty(payload))
+                            {
+                                await messageActions.CompleteMessageAsync(message);
+                                return payload;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"ERROR : GenerateVerificationCode.Run :: {ex.Message}");
         }
 
-        [Function(nameof(GenerateVerificationCode))]
-        public async Task Run(
-            [ServiceBusTrigger("verification_request", Connection = "ServiceBusConnection")]
-            ServiceBusReceivedMessage message,
-            ServiceBusMessageActions messageActions)
-        {
-            _logger.LogInformation("Message ID: {id}", message.MessageId);
-            _logger.LogInformation("Message Body: {body}", message.Body);
-            _logger.LogInformation("Message Content-Type: {contentType}", message.ContentType);
-
-            // Complete the message
-            await messageActions.CompleteMessageAsync(message);
-        }
+        return null!;
     }
+
 }
