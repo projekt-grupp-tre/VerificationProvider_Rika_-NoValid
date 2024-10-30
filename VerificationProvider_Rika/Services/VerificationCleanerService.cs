@@ -1,5 +1,6 @@
 ﻿
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using VerificationProvider_Rika.Data.Contexts;
 
