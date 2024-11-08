@@ -3,11 +3,15 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "ServiceBusConnection": "Endpoint=sb://sb-emailprovider-v2.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=sBIcy5Zaw85JUZSKVh07clpqUEGvjXDoh+ASbFhN8eg=",
-    "VerificationDatabase": "Server=tcp:verification-database.database.windows.net,1433;Initial Catalog=verification_database;Persist Security Info=False;User ID=SqlAdmin;Password=Bytmig123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-    "Verify_FunctionKey": "https://verificationprovider-group3.azurewebsites.net/api/verify?code=ye61aXEds-iuSA3YG7OPCbMbLpU5B6-awY7TKB88oBacAzFud3pmkQ%3D%3D",
 
+
+    "ServiceBusConnection": "Endpoint=sb://sb-emailprovider-v2.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=sBIcy5Zaw85JUZSKVh07clpqUEGvjXDoh+ASbFhN8eg=",
+    "VerificationDatabase": "Server=tcp:verify.database.windows.net,1433;Initial Catalog=verify_rika;Persist Security Info=False;User ID=SqlAdmmin;Password=Bytmig123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+
+    "Verify_FunctionKey": "https://verification-rika.azurewebsites.net/api/verify?code=0mQbf3eCNmaWk7YjezTtO2DZNsI0gDN6QD9p7Cd10z11AzFuY415IA%3D%3D",
+    "GenerateCodeHttp_Key": "https://verification-rika.azurewebsites.net/api/GenerateVerificationCodeHttp?code=BItffmctv-BTFfGNf9NM61EP5Mz1AVueZv_l54lDiED8AzFuZoyorg%3D%3D",
     "QueueName": "verification_request",
+
 
     "SCM_DO_BUILD_DURING_DEPLOYMENT": "true",
     "WEBSITE_NODE_DEFAULT_VERSION": "~20",
